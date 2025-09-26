@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sofia - Agente de IA</title>
+    <title>Miguel - Agente Mecánico</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,34 +21,35 @@
         }
 
         .container {
-            width: 350px;
-            height: 600px;
+            width: 380px;
+            height: 650px;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
             overflow: hidden;
             position: relative;
         }
 
         .header {
-            background: white;
-            padding: 20px 20px 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px 20px 15px 20px;
             text-align: center;
-            border-bottom: 1px solid #eee;
+            color: white;
         }
 
         .logo {
-            width: 120px;
-            height: 40px;
+            width: 140px;
+            height: 45px;
             margin: 0 auto 20px;
-            background: linear-gradient(45deg, #4a90e2, #7ed321);
-            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
         }
 
         .avatar-container {
@@ -73,8 +74,9 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #4a90e2;
+            border: 3px solid rgba(255,255,255,0.8);
             transition: all 0.3s ease;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
         }
 
         .sound-waves {
@@ -92,7 +94,7 @@
 
         .wave {
             position: absolute;
-            border: 2px solid #4a90e2;
+            border: 2px solid rgba(255,255,255,0.6);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
@@ -133,23 +135,41 @@
         }
 
         .agent-name {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
-            color: #333;
             margin: 15px 0 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .agent-title {
             font-size: 16px;
-            color: #666;
+            opacity: 0.9;
             margin-bottom: 10px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            margin-left: 8px;
+            animation: blink 2s infinite;
+        }
+
+        .status-indicator.loading {
+            background: #FFC107;
+        }
+
+        .status-indicator.error {
+            background: #F44336;
         }
 
         .content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            height: calc(100% - 160px - 80px - 70px); /* Header más compacto */
+            height: calc(100% - 160px - 80px - 70px);
         }
 
         .chat-panel {
@@ -167,7 +187,7 @@
             flex-wrap: wrap;
             gap: 8px;
             padding: 12px 20px;
-            background: #fafbfc;
+            background: #f8f9fa;
             border-top: 1px solid #eee;
             border-bottom: 1px solid #eee;
             position: absolute;
@@ -178,23 +198,23 @@
         }
 
         .chat-tag {
-            background: #f5f6f7;
-            color: #6c757d;
-            padding: 6px 14px;
-            border-radius: 12px;
-            font-size: 11px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
-            border: 1px solid #e9ecef;
+            border: none;
             white-space: nowrap;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: inherit;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
 
         .chat-tag:hover {
-            background: #e9ecef;
-            color: #495057;
-            border-color: #dee2e6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
         .chat-tag:active {
@@ -224,7 +244,7 @@
         .chat-input {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             padding: 15px 20px;
             background: white;
             border-top: 1px solid #eee;
@@ -237,33 +257,46 @@
 
         .input-field {
             flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
+            padding: 14px 18px;
+            border: 2px solid #e9ecef;
             border-radius: 25px;
             outline: none;
             font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
         }
 
         .send-btn {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border: none;
-            background: #7b2cbf;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.1s ease;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
 
         .send-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
         .send-btn:active {
             transform: scale(0.95);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .bottom-nav {
@@ -295,10 +328,10 @@
         }
 
         .nav-btn.active {
-            background: #4a90e2;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
         .nav-btn:not(.active) {
@@ -341,38 +374,93 @@
         }
 
         .message {
-            margin: 10px 0;
-            padding: 10px 15px;
+            margin: 12px 0;
+            padding: 12px 16px;
             border-radius: 18px;
-            max-width: 80%;
+            max-width: 85%;
             word-wrap: break-word;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .message.bot {
-            background: #f0f0f0;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             align-self: flex-start;
-            border-bottom-left-radius: 5px;
+            border-bottom-left-radius: 8px;
+            border: 1px solid #e9ecef;
         }
 
         .message.user {
-            background: #4a90e2;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             align-self: flex-end;
             margin-left: auto;
-            border-bottom-right-radius: 5px;
+            border-bottom-right-radius: 8px;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 18px;
+            border-bottom-left-radius: 8px;
+            max-width: 85%;
+            margin: 12px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typing 1.5s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            30% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
         }
 
         .recording-indicator {
             text-align: center;
             color: #666;
-            font-size: 14px;
+            font-size: 16px;
             margin-top: 20px;
+            padding: 20px;
         }
 
         .recording-dot {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 12px;
+            height: 12px;
             background: #e74c3c;
             border-radius: 50%;
             margin-right: 8px;
@@ -383,38 +471,49 @@
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0.3; }
         }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">Global Exchange</div>
+            <div class="logo">Mecánica Automotriz</div>
             <div class="avatar-container chat-mode" id="avatarContainer">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='60' r='60' fill='%23f0f0f0'/%3E%3Ccircle cx='60' cy='45' r='20' fill='%234a90e2'/%3E%3Cpath d='M30 90 Q30 70 60 70 Q90 70 90 90 Z' fill='%234a90e2'/%3E%3C/svg%3E" alt="Sofia" class="avatar" id="avatar">
+                <div class="avatar" id="avatar"></div>
                 <div class="sound-waves" id="soundWaves">
                     <div class="wave"></div>
                     <div class="wave"></div>
                     <div class="wave"></div>
                 </div>
             </div>
-            <div class="agent-name">Sofia</div>
-            <div class="agent-title">Agente de IA</div>
+            <div class="agent-name">
+                Miguel
+                <span class="status-indicator" id="statusIndicator"></span>
+            </div>
+            <div class="agent-title">Especialista en Mecánica</div>
         </div>
 
         <div class="content">
             <div class="chat-panel" id="chatPanel">
                 <div class="chat-messages" id="chatMessages">
                     <div class="message bot">
-                        ¡Hola! Soy Sofia, tu asistente de IA. ¿En qué puedo ayudarte hoy?
+                        ¡Hola! Soy Miguel, tu asistente especializado en mecánica automotriz. Puedo ayudarte con diagnósticos, mantenimiento y reparaciones basándome en manuales técnicos. ¿Qué problema mecánico necesitas resolver?
                     </div>
                 </div>
                 <div class="chat-tags">
-                    <button class="chat-tag" onclick="selectTag('Ver fotos')">Ver fotos</button>
-                    <button class="chat-tag" onclick="selectTag('Ver videos')">Ver videos</button>
-                    <button class="chat-tag" onclick="selectTag('Preguntas frecuentes')">Preguntas frecuentes</button>
+                    <button class="chat-tag" onclick="selectTag('Problemas de motor')">Problemas de motor</button>
+                    <button class="chat-tag" onclick="selectTag('Frenos y suspensión')">Frenos y suspensión</button>
+                    <button class="chat-tag" onclick="selectTag('Sistema eléctrico')">Sistema eléctrico</button>
+                    <button class="chat-tag" onclick="selectTag('Cambio de aceite')">Cambio de aceite</button>
                 </div>
                 <div class="chat-input">
-                    <input type="text" class="input-field" placeholder="Escriba aquí..." id="messageInput">
+                    <input type="text" class="input-field" placeholder="Describe tu problema mecánico..." id="messageInput">
                     <button class="send-btn" id="sendBtn">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -422,12 +521,13 @@
                         </svg>
                     </button>
                 </div>
+                <div class="error-message" id="errorMessage" style="display: none;"></div>
             </div>
 
             <div class="voice-panel" id="voicePanel">
                 <div class="recording-indicator" id="recordingIndicator">
                     <div class="recording-dot"></div>
-                    Toca para hablar...
+                    Toca para hacer una consulta por voz...
                 </div>
             </div>
         </div>
@@ -446,12 +546,16 @@
                     <path d="M12 19V23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M8 23H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span class="nav-label">Voice</span>
+                <span class="nav-label">Voz</span>
             </button>
         </div>
     </div>
 
     <script>
+        // Configuration
+        const API_BASE_URL = window.location.origin;
+        
+        // DOM Elements
         const chatBtn = document.getElementById('chatBtn');
         const voiceBtn = document.getElementById('voiceBtn');
         const chatPanel = document.getElementById('chatPanel');
@@ -462,11 +566,44 @@
         const sendBtn = document.getElementById('sendBtn');
         const chatMessages = document.getElementById('chatMessages');
         const recordingIndicator = document.getElementById('recordingIndicator');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const errorMessage = document.getElementById('errorMessage');
 
+        // State
         let isVoiceMode = false;
         let isRecording = false;
+        let isLoading = false;
+        let currentAudio = null;
 
-        // Cambiar entre modos
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkSystemStatus();
+            switchMode('chat');
+        });
+
+        // System status check
+        async function checkSystemStatus() {
+            try {
+                statusIndicator.classList.add('loading');
+                const response = await fetch(`${API_BASE_URL}/api/health`);
+                const data = await response.json();
+                
+                if (data.status === 'healthy') {
+                    statusIndicator.classList.remove('loading');
+                    statusIndicator.classList.remove('error');
+                    console.log('Sistema listo:', data);
+                } else {
+                    throw new Error('Sistema no disponible');
+                }
+            } catch (error) {
+                statusIndicator.classList.remove('loading');
+                statusIndicator.classList.add('error');
+                console.error('Error de conexión:', error);
+                showError('Error de conexión con el servidor');
+            }
+        }
+
+        // Mode switching
         function switchMode(mode) {
             if (mode === 'chat') {
                 isVoiceMode = false;
@@ -477,6 +614,7 @@
                 avatarContainer.classList.remove('voice-mode');
                 avatarContainer.classList.add('chat-mode');
                 soundWaves.classList.remove('active');
+                messageInput.focus();
             } else if (mode === 'voice') {
                 isVoiceMode = true;
                 voiceBtn.classList.add('active');
@@ -489,105 +627,188 @@
             }
         }
 
-        // Event listeners para los botones de navegación
-        chatBtn.addEventListener('click', () => {
-            switchMode('chat');
-        });
+        // Event listeners
+        chatBtn.addEventListener('click', () => switchMode('chat'));
+        voiceBtn.addEventListener('click', () => switchMode('voice'));
 
-        voiceBtn.addEventListener('click', () => {
-            switchMode('voice');
-        });
-
-        // Funcionalidad del chat
+        // Chat functionality
         function addMessage(text, isUser = false) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message');
             messageDiv.classList.add(isUser ? 'user' : 'bot');
-            messageDiv.textContent = text;
-            chatMessages.appendChild(messageDiv);
             
-            // Auto-scroll hacia abajo siempre que se agrega un nuevo mensaje
+            // Format text for better readability
+            if (!isUser) {
+                messageDiv.innerHTML = formatBotMessage(text);
+            } else {
+                messageDiv.textContent = text;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function formatBotMessage(text) {
+            // Preserve line breaks and format technical information
+            return text
+                .replace(/\n/g, '<br>')
+                .replace(/([A-ZÁÉÍÓÚÜ][^:]*:)/g, '<strong>$1</strong>')
+                .replace(/(- [^<\n]+)/g, '<em>$1</em>');
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('typing-indicator');
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+                Miguel está consultando la base técnica...
+            `;
+            chatMessages.appendChild(typingDiv);
+            scrollToBottom();
+        }
+
+        function removeTypingIndicator() {
+            const typingDiv = document.getElementById('typingIndicator');
+            if (typingDiv) {
+                typingDiv.remove();
+            }
+        }
+
+        function scrollToBottom() {
             setTimeout(() => {
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 10);
         }
 
-        function sendMessage() {
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // Send message function
+        async function sendMessage() {
             const message = messageInput.value.trim();
-            if (message) {
+            if (!message || isLoading) return;
+
+            try {
+                isLoading = true;
+                sendBtn.disabled = true;
+                
                 addMessage(message, true);
                 messageInput.value = '';
+                showTypingIndicator();
+
+                const response = await fetch(`${API_BASE_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
                 
-                // Simular respuesta del bot
-                setTimeout(() => {
-                    const responses = [
-                        "Entiendo tu consulta. ¿Puedes darme más detalles?",
-                        "Perfecto, estoy procesando tu solicitud.",
-                        "Gracias por la información. Te ayudo con eso.",
-                        "Interesante pregunta. Déjame ayudarte con eso.",
-                        "Claro, puedo asistirte con eso.",
-                        "He recibido tu mensaje. Aquí tienes algunas opciones que podrían interesarte para continuar con tu consulta sobre productos.",
-                        "Excelente pregunta. Te proporciono información detallada que espero te sea muy útil para resolver tu consulta de manera completa."
-                    ];
-                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                    addMessage(randomResponse);
-                }, 1000);
+                removeTypingIndicator();
+                addMessage(data.response);
+
+                // Text-to-speech for bot response
+                if (data.response) {
+                    await playTextToSpeech(data.response);
+                }
+
+            } catch (error) {
+                console.error('Error sending message:', error);
+                removeTypingIndicator();
+                addMessage('Lo siento, hubo un error procesando tu consulta. Por favor, intenta nuevamente.');
+                showError('Error de comunicación: ' + error.message);
+            } finally {
+                isLoading = false;
+                sendBtn.disabled = false;
+                messageInput.focus();
             }
         }
 
+        // Text-to-speech functionality
+        async function playTextToSpeech(text) {
+            try {
+                // Stop any current audio
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+
+                const response = await fetch(`${API_BASE_URL}/api/speak`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`TTS Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.useBrowserTTS) {
+                    // Fallback to browser TTS
+                    if ('speechSynthesis' in window) {
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        utterance.lang = 'es-ES';
+                        utterance.rate = 0.9;
+                        utterance.pitch = 1.0;
+                        speechSynthesis.speak(utterance);
+                    }
+                } else if (data.audioUrl) {
+                    // Play AWS Polly audio
+                    currentAudio = new Audio(data.audioUrl);
+                    currentAudio.play().catch(console.error);
+                    
+                    // Show audio visualization
+                    soundWaves.classList.add('active');
+                    currentAudio.addEventListener('ended', () => {
+                        soundWaves.classList.remove('active');
+                    });
+                }
+
+            } catch (error) {
+                console.error('TTS Error:', error);
+                // Silent fallback - don't show error for TTS issues
+            }
+        }
+
+        // Event listeners
         sendBtn.addEventListener('click', sendMessage);
 
         messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
                 sendMessage();
             }
         });
 
-        // Funcionalidad para los tags
+        // Quick tag functionality
         function selectTag(tagText) {
             messageInput.value = tagText;
             messageInput.focus();
+            // Optionally auto-send
+            setTimeout(() => sendMessage(), 100);
         }
 
-        // Detectar scroll manual del usuario
-        let isUserScrolling = false;
-        let scrollTimeout;
-
-        chatMessages.addEventListener('scroll', () => {
-            // Detectar si el usuario está haciendo scroll manualmente
-            const isAtBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 1;
-            
-            if (!isAtBottom) {
-                isUserScrolling = true;
-                
-                // Reset el flag después de un tiempo sin scroll
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    // Si está cerca del final, resetear para auto-scroll en próximos mensajes
-                    if (chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 50) {
-                        isUserScrolling = false;
-                    }
-                }, 1000);
-            } else {
-                isUserScrolling = false;
-            }
-        });
-
-        // Modificar la función addMessage para respetar el scroll del usuario
-        function addMessage(text, isUser = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message');
-            messageDiv.classList.add(isUser ? 'user' : 'bot');
-            messageDiv.textContent = text;
-            chatMessages.appendChild(messageDiv);
-            
-            // Solo hacer auto-scroll si el usuario no está navegando mensajes anteriores
-            if (!isUserScrolling) {
-                setTimeout(() => {
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 10);
-            }
-        }
+        // Voice functionality (placeholder for future implementation)
         voicePanel.addEventListener('click', () => {
             if (isVoiceMode && !isRecording) {
                 startRecording();
@@ -596,9 +817,10 @@
 
         function startRecording() {
             isRecording = true;
-            recordingIndicator.innerHTML = '<div class="recording-dot"></div>Grabando... Toca para detener';
+            recordingIndicator.innerHTML = '<div class="recording-dot"></div>Grabando consulta mecánica... Toca para detener';
+            soundWaves.classList.add('active');
             
-            // Simular grabación
+            // Placeholder - implement actual voice recording
             setTimeout(() => {
                 stopRecording();
             }, 3000);
@@ -606,16 +828,17 @@
 
         function stopRecording() {
             isRecording = false;
-            recordingIndicator.innerHTML = '<div class="recording-dot"></div>Procesando...';
+            soundWaves.classList.remove('active');
+            recordingIndicator.innerHTML = '<div class="recording-dot"></div>Procesando consulta...';
             
             setTimeout(() => {
-                recordingIndicator.innerHTML = '<div class="recording-dot"></div>Toca para hablar...';
-                // Aquí podrías agregar la respuesta por voz
+                recordingIndicator.innerHTML = '<div class="recording-dot"></div>Toca para hacer una consulta por voz...';
+                // Here you would process the recorded audio and send to backend
             }, 2000);
         }
 
-        // Inicializar en modo chat
-        switchMode('chat');
+        // Make selectTag globally available
+        window.selectTag = selectTag;
     </script>
 </body>
 </html>
