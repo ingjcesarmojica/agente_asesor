@@ -7,9 +7,10 @@ from flask_cors import CORS
 import logging
 from botocore.exceptions import BotoCoreError, ClientError
 import re
-from pinecone import Pinecone, ServerlessSpec
+import pinecone
 from sentence_transformers import SentenceTransformer
 import torch
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -36,23 +37,20 @@ def init_pinecone():
     global pc, index, model
     try:
         if PINECONE_API_KEY:
-            pc = Pinecone(api_key=PINECONE_API_KEY)
+            # Inicializar Pinecone (versión 2.x)
+            pinecone.init(api_key=PINECONE_API_KEY, environment="us-east1-gcp")
             
             # Verificar si el índice existe
-            if INDEX_NAME not in [idx.name for idx in pc.list_indexes()]:
+            if INDEX_NAME not in pinecone.list_indexes():
                 app.logger.info(f"Creando índice {INDEX_NAME}...")
-                pc.create_index(
+                pinecone.create_index(
                     name=INDEX_NAME,
                     dimension=384,  # all-MiniLM-L6-v2 tiene 384 dimensiones
-                    metric="cosine",
-                    spec=ServerlessSpec(
-                        cloud="aws",
-                        region="us-east-1"
-                    )
+                    metric="cosine"
                 )
                 app.logger.info("Índice creado exitosamente")
             
-            index = pc.Index(INDEX_NAME)
+            index = pinecone.Index(INDEX_NAME)
             
             # Cargar el modelo de embeddings
             model = SentenceTransformer('all-MiniLM-L6-v2')
