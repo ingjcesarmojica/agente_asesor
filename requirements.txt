@@ -1,20 +1,9 @@
-
-# Dependencias base primero
-setuptools>=65.0.0
-wheel>=0.38.0
-packaging>=21.0
-
-# Flask y dependencias web
-Flask==2.3.3
-Flask-CORS==4.0.0
-gunicorn==21.2.0
-
-# AWS y APIs
-boto3==1.34.0
-requests==2.31.0
-
-# ML y vectores - versiones más compatibles
-numpy==1.24.3
-torch==1.13.1
-sentence-transformers==2.2.2
-pinecone-client==2.2.1
+Flask
+Flask-CORS
+boto3
+requests
+gunicorn
+numpy
+torch
+sentence-transformers
+pinecone-client
