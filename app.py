@@ -9,8 +9,12 @@ from botocore.exceptions import BotoCoreError, ClientError
 import re
 import pinecone
 from sentence_transformers import SentenceTransformer
-import torch
 from datetime import datetime
+
+try:
+    import torch
+except ImportError:
+    torch = None
 
 app = Flask(__name__)
 CORS(app)
@@ -25,6 +29,7 @@ AWS_REGION = os.environ.get("AWS_REGION", "us-east-1")
 
 # Configuración Pinecone
 PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
+PINECONE_ENVIRONMENT = os.environ.get("PINECONE_ENVIRONMENT", "us-east1")
 INDEX_NAME = "mecanica-vehiculos"
 
 # Inicializar clientes
@@ -37,8 +42,8 @@ def init_pinecone():
     global pc, index, model
     try:
         if PINECONE_API_KEY:
-            # Inicializar Pinecone (versión 2.x)
-            pinecone.init(api_key=PINECONE_API_KEY, environment="us-east1-gcp")
+            # Inicializar Pinecone con el environment correcto
+            pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
             
             # Verificar si el índice existe
             if INDEX_NAME not in pinecone.list_indexes():
